@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leap Cursor Library - Image Cursor with Zoom</title>
+    <style type="text/css">
+        .leap-cursor {
+            position: absolute;
+            transition-property: background-color; 
+            background-image: url('leap_motion_logo.png');
+            background-size: 100% auto;
+            width:200px;
+            height:96px;
+        }
+    </style>
+    <script type="text/javascript" src="../src/js/leap-manager.js"></script>
+    <script type="text/javascript" src="../lib/js/leap.min.js"></script>
+</head>
+<body>
+    <h1>Image Cursor with Zoom</h1>
+    <p>Your fingertips (pointables) are now custom images. The z position of your forward-most pointable controls the zoom factor of the image(s).</p>
+    <p>And here are a couple debugging divs so you can see the math that's happening:</p>
+    <div id="z">z 0</div>
+    <div id="z_zoom">z_zoom 0</div>
+    <script type="text/javascript">
+        LeapManager.init({
+            maxCursors:5,
+            frameCallback:function(frame){
+                frame.pointables.forEach(function(p,i) {
+                    // only act based on one finger
+                    if (i > 0) return;
+
+                    var z = p.tipPosition[2];
+                    document.getElementById("z").innerHTML = ("z " + z);
+
+                    z = (z + 200) / 100;  //  offset and zoom
+                    document.getElementById("z_zoom").innerHTML = ("z_zoom " + z);
+
+                    var base_width = 200;
+                    var base_height = 96;                    
+                    var new_width = base_width * z;
+                    var new_height = base_height * z;
+
+                    var leap_cursor = document.querySelectorAll(".leap-cursor");
+                    for (i = 0; i < leap_cursor.length; i++) {
+                        leap_cursor[i].style.width =  new_width + "px";
+                        leap_cursor[i].style.height = new_height + "px";
+                    }
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>
