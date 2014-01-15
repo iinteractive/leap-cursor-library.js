@@ -16,8 +16,10 @@
             background-color: orangered;
         }
     </style>
+
     <script type="text/javascript" src="../build/js/leap-manager.min.js"></script>
     <script type="text/javascript" src="../lib/js/leap.min.js"></script>
+
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 </head>
 <body>
@@ -33,19 +35,24 @@
         var output  = document.querySelector("div.output");
         var count   = 0;
 
-        for (var i = 0; i < buttons.length; i++) {
-            buttons[i].addEventListener("click", function(e){
-                output.innerHTML += count + ": Button Clicked</br>";
-                count++;
-            });
-        };
 
         LeapManager.init({
             maxCursors:5
         });
 
         // This button looks clickable, but the Leap nor mouse can click it:
-        $('#buttons').append('<div class="button leap-interactive">Click Me (jQuery)</div>');
+//        $('#buttons').append('<div class="button leap-interactive">Click Me (jQuery)</div>');
+// cause .click() wasn't defined on it. Moved click down below:
+
+        var new_button = $('<div>Click Me (jQuery)</div>').addClass("button leap-interactive");
+        $('#buttons').append(new_button);
+
+        $('.button').click(function(e){
+            output.innerHTML += count + ": Button Clicked</br>";
+            count++;
+        });
+
+
     </script>
 </body>
 </html>
